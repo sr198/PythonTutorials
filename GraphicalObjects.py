@@ -87,7 +87,7 @@ def draw_triangle_fractal(startX, startY, edgeSize):
     
     start = turtle.Turtle()
     start.shape("turtle")
-    start.speed(1)
+    start.speed(5)
     start.color("red")
 
     #draw base triangle first
@@ -95,76 +95,79 @@ def draw_triangle_fractal(startX, startY, edgeSize):
     start.setpos(startX, startY)
     
     start.pendown()
+    start.color("red","yellow")
+    start.begin_fill()
     start.forward(edgeSize)
     start.left(120)
     start.forward(edgeSize)
     start.left(120)
     start.forward(edgeSize)
-    
-    start.left(180)
-    start.forward(edgeSize/2)
-    start.right(60)
-
-    start.forward(edgeSize/2)
-    start.right(120)
-    start.forward(edgeSize/2)
-    start.right(120)
-    start.forward(edgeSize/2)
+    start.end_fill()
+    start.backward(edgeSize/2)
+    draw_triangle(start, edgeSize/2, 0)
 
     start.penup()
-    start.backward(edgeSize/4)
-    start.pendown()
-    draw_triangle(start, edgeSize/4, 1)
-##
-##    start.penup()
-##    start.setx(start.xcor()+(edgeSize/4))
-##    start.pendown()
-##    draw_triangle(start, edgeSize/4, "right",1)
-##
-##    start.penup()
-##    start.forward(edgeSize/4)    
-##    start.pendown()
-##    draw_triangle(start, edgeSize/4, "top",1)
-##
-##    start.penup()
-##    start.
-##    start.pendown()
+    start.setpos(startX,startY)
+    
     window.exitonclick()
 
+
 def draw_triangle(start, edge, level):
-    start.setheading(0)
-    level = level + 1
-
-    if( level == 3 ):
-        return
+    parent_x=start.xcor()
+    parent_y=start.ycor()
     
-    #draw triangle on the left
-    start.left(180)
+    #draw the triangle
+    start.color("red","green")
+    start.setheading(0)
+    start.begin_fill()
     start.forward(edge)
-    start.left(120)
+    start.right(120)
     start.forward(edge)
-    start.left(120)
+    start.right(120)
     start.forward(edge)
-    draw_triangle( start, edge/2, level)
+    start.end_fill()
+    #terminating condition
+    level = level + 1
+    if( level == 4):
+        return
 
-    #triangle on the right
+    #draw triangle on the left with edge/2 sides
+    #locate the left starting point
+    start.setheading(0)
+    start.penup()
+    start.right(120)
+    start.forward(edge/2)
+    start.pendown()
+    draw_triangle( start, edge/2, level )
+    #reset start to parent
+    start.penup()
+    start.setx(parent_x)
+    start.sety(parent_y)
+    start.pendown()
+    
+    #triangle to the right
+    start.setheading(0)
+    start.penup()
     start.forward(edge)
     start.right(120)
-    start.forward(edge)
-    start.right(120)
-    start.forward(edge)
+    start.forward(edge/2)
+    start.pendown()
     draw_triangle( start, edge/2, level)
+    #reset start to parent
+    start.penup()
+    start.setx(parent_x)
+    start.sety(parent_y)
+    start.pendown()
     
     #triangle on the top
+    start.setheading(0)
+    start.penup()
     start.left(60)
-    start.forward(edge)
-    start.left(120)
-    start.forward(edge)
-    start.left(120)
-    start.forward(edge)
-    draw_triangle( start, edge/2, level)
-    
+    start.forward(edge/2)
+    start.pendown()
+    draw_triangle( start, edge/2, level)    
+
 def main_program():
-   draw_triangle_fractal(0.0,0.0,400)
+   draw_triangle_fractal(-200.0,-200.0,800)
     
 main_program()
